@@ -55,12 +55,9 @@
       font-size: 16px;
       z-index: 2;
     }
-
-    /* Double the width of .top-bar on mobile and tablet screens */
-    @media (max-width: 768px) {
-      .bottom-banner {
-        width: 0px;
-      }
+  
+    .hide-banner {
+      display: none;
     }
   </style>
 </head>
@@ -70,7 +67,18 @@
   <iframe id="videoFrame" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation allow-presentation" scrolling="no" allowfullscreen="true"></iframe>
 
   <div class="bottom-banner"></div>
-
+  
+  <script>
+    function hideBannerForAppleDevices() {
+      const isAppleDevice = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
+      if (isAppleDevice) {
+        document.querySelector('.bottom-banner').classList.add('hide-banner');
+      }
+    }
+    hideBannerForAppleDevices();
+  </script>
+  
+  
   <script>
     function setIframeSource() {
       const urlParams = new URLSearchParams(window.location.search);
