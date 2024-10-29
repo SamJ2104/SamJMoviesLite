@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>SamJ Movies</title>
   <style>
     @font-face {
       font-family: 'CustomFont';
@@ -43,7 +43,8 @@
       font-family: 'CustomFont', sans-serif;
       z-index: 1;
     }
-      .bottom-banner {
+
+    .bottom-banner {
       position: absolute;
       bottom: 0px;
       right: 1px;
@@ -53,6 +54,13 @@
       font-family: 'CustomFont', sans-serif;
       font-size: 16px;
       z-index: 2;
+    }
+
+    /* Double the width of .top-bar on mobile and tablet screens */
+    @media (max-width: 768px) {
+      .top-bar {
+        width: 20%;
+      }
     }
   </style>
 </head>
