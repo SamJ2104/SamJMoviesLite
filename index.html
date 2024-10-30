@@ -2,120 +2,118 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SamJ Movies</title>
-  <style>
-    @font-face {
-      font-family: 'CustomFont';
-      src: url('font.woff2') format('woff2');
-      font-weight: normal;
-      font-style: normal;
-    }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SamJ Movies</title>
+    <style>
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('font.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
 
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: black;
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
 
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-    }
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
 
-    .top-bar {
-      position: absolute;
-      top: 0;
-      right: 1px;
-      width: 100%;
-      height: 60px;
-      background-color: black;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
-      font-family: 'CustomFont', sans-serif;
-      z-index: 1;
-    }
+        .top-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(31, 31, 31, 0.15);
+            color: #000000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            color: white;
+            right: 1px;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: 'CustomFont', sans-serif;
+            z-index: 1;
+            transition: transform 0.5s ease;
 
-    .bottom-banner {
-      position: absolute;
-      bottom: 0px;
-      right: 1px;
-      background-color: black;
-      padding: 25px 40px;
-      border-radius: 5px;
-      font-family: 'CustomFont', sans-serif;
-      font-size: 16px;
-      z-index: 2;
-    }
-  
-    .hide-banner {
-      display: none;
-    }
-  </style>
+        }
+
+        .slide-up {
+            transform: translateY(-100%);
+        }
+
+
+        .hide-banner {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="top-bar">SamJ Movies Lite</div>
-  <iframe id="videoFrame" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation allow-presentation" scrolling="no" allowfullscreen="true"></iframe>
+    <div class="top-bar" id="topBanner">SamJ Movies is now powered by VidBinge</div>
+    <iframe id="videoFrame"
+        sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation allow-presentation" scrolling="no"
+        allowfullscreen="true"></iframe>
 
-  <div class="bottom-banner"></div>
-  
-  <script>
-    function hideBannerForAppleDevices() {
-      const isAppleDevice = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
-      if (isAppleDevice) {
-        document.querySelector('.bottom-banner').classList.add('hide-banner');
-      }
-    }
-    hideBannerForAppleDevices();
-  </script>
-  
-  
-  <script>
-    function setIframeSource() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const mediaUrl = urlParams.get('aurl');
-      const iframe = document.getElementById('videoFrame');
-      
-      if (mediaUrl) {
-        const mediaPattern = /tmdb-(movie|tv)-(\d+)(?:-[^\/]*)?(?:\/(\d+)\/(\d+))?/;
-        const matches = mediaUrl.match(mediaPattern);
+    <script>
+        function setIframeSource() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mediaUrl = urlParams.get('aurl');
+            const iframe = document.getElementById('videoFrame');
 
-        if (matches) {
-          const type = matches[1];
-          const id = matches[2];
-          const season = matches[3];
-          const episode = matches[4];
-          
-          let embedUrl;
-          if (type === 'movie') {
-            embedUrl = `https://vidbinge.dev/embed/movie/${id}`;
-          } else if (type === 'tv' && season && episode) {
-            embedUrl = `https://vidbinge.dev/embed/tv/${id}/1/1`;
-          } else {
-            console.error("Invalid URL format for series");
-            return;
-          }
-          
-          iframe.src = embedUrl;
-        } else {
-          console.error("Invalid media URL format");
+            if (mediaUrl) {
+                const mediaPattern = /tmdb-(movie|tv)-(\d+)(?:-[^\/]*)?(?:\/(\d+)\/(\d+))?/;
+                const matches = mediaUrl.match(mediaPattern);
+
+                if (matches) {
+                    const type = matches[1];
+                    const id = matches[2];
+                    const season = matches[3];
+                    const episode = matches[4];
+
+                    let embedUrl;
+                    if (type === 'movie') {
+                        embedUrl = `https://vidbinge.dev/embed/movie/${id}`;
+                    } else if (type === 'tv' && season && episode) {
+                        embedUrl = `https://vidbinge.dev/embed/tv/${id}/${season}/${episode}`;
+                    } else {
+                        console.error("Invalid URL format for series");
+                        return;
+                    }
+
+                    iframe.src = embedUrl;
+                } else {
+                    console.error("Invalid media URL format");
+                }
+            } else {
+                console.error("No media URL provided");
+            }
         }
-      } else {
-        console.error("No media URL provided");
-      }
-    }
 
-    setIframeSource();
-  </script>
+        // Trigger the banner to slide up after 3 seconds
+        setTimeout(() => {
+            document.getElementById('topBanner').classList.add('slide-up');
+        }, 3000);
+
+        setIframeSource();
+    </script>
 </body>
 
 </html>
