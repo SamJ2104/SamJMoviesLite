@@ -55,37 +55,42 @@
     <div class="top-bar" id="topBanner">SamJ Movies is now powered by VidBinge</div>
     <iframe id="videoFrame" scrolling="no" allowfullscreen></iframe>
 
-<script>
-    if (matches) {
-        const type = matches[1];
-        const id = matches[2];
-        const season = matches[3];
-        const episode = matches[4];
+    <script>
+        const matches = window.location.pathname.match(/\/(movie|tv)\/(\d+)(?:\/(\d+)\/(\d+))?/);
 
-        let embedUrl;
-        if (type === 'movie') {
-            embedUrl = `embed.html?aurl=https://vidbinge.dev/embed/movie/${id}`;
-        } else if (type === 'tv' && season && episode) {
-            embedUrl = `embed.html?aurl=https://vidbinge.dev/embed/tv/${id}/${season}/${episode}`;
-        } else {
-            console.error("Invalid URL format for series");
-            return;
+        function setIframeSource() {
+            if (matches) {
+                const type = matches[1];
+                const id = matches[2];
+                const season = matches[3];
+                const episode = matches[4];
+
+                let embedUrl;
+                if (type === 'movie') {
+                    embedUrl = `embed.html?aurl=https://vidbinge.dev/embed/movie/${id}`;
+                } else if (type === 'tv' && season && episode) {
+                    embedUrl = `embed.html?aurl=https://vidbinge.dev/embed/tv/${id}/${season}/${episode}`;
+                } else {
+                    console.error("Invalid URL format for series");
+                    return;
+                }
+
+                document.getElementById('videoFrame').src = embedUrl;
+            } else {
+                console.error("Invalid media URL format");
+            }
         }
 
-        iframe.src = embedUrl;
-    } else {
-        console.error("Invalid media URL format");
-    }
-    // Trigger the banner to slide up after 3 seconds if it exists
-            const banner = document.getElementById('topBanner');
-            if (banner) {
-                setTimeout(() => {
-                    banner.classList.add('slide-up');
-                }, 3000);
-            }
+        // Trigger the banner to slide up after 3 seconds if it exists
+        const banner = document.getElementById('topBanner');
+        if (banner) {
+            setTimeout(() => {
+                banner.classList.add('slide-up');
+            }, 3000);
+        }
 
-            setIframeSource();
-        });
+        // Call the function to set the iframe source
+        setIframeSource();
     </script>
 </body>
 </html>
