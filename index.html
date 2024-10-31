@@ -73,20 +73,24 @@
         allowfullscreen="true"></iframe>
 
     <script>
-        function setIframeSource() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const mediaUrl = urlParams.get('aurl');
-            const iframe = document.getElementById('videoFrame');
+function setIframeSource() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mediaUrl = urlParams.get('aurl');
+    const iframe = document.getElementById('videoFrame');
 
-            const embedUrl = "embed.html?aurl=" + mediaUrl
-            iframe.src = embedUrl;
+    if (mediaUrl) { // Check if mediaUrl is valid
+        const embedUrl = "embed.html?aurl=" + mediaUrl;
+        iframe.src = embedUrl;
+    }
 
-        // Trigger the banner to slide up after 3 seconds
-        setTimeout(() => {
-            document.getElementById('topBanner').classList.add('slide-up');
-        }, 3000);
+    // Trigger the banner to slide up after 3 seconds
+    setTimeout(() => {
+        document.getElementById('topBanner').classList.add('slide-up');
+    }, 3000);
+}
 
-        setIframeSource();
+// Call the function once here
+setIframeSource();
     </script>
 </body>
 
