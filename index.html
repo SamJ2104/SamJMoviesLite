@@ -73,39 +73,18 @@
         allowfullscreen="true"></iframe>
 
     <script>
-        function setIframeSource() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const mediaUrl = urlParams.get('aurl');
-            const iframe = document.getElementById('videoFrame');
+        document.addEventListener("DOMContentLoaded", function() {
+            function setIframeSource() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const mediaUrl = urlParams.get('aurl');
+                const iframe = document.getElementById('videoFrame');
 
-            if (mediaUrl) {
-                const mediaPattern = /tmdb-(movie|tv)-(\d+)(?:-[^\/]*)?(?:\/(\d+)\/(\d+))?/;
-                const matches = mediaUrl.match(mediaPattern);
-
-                if (matches) {
-                    const type = matches[1];
-                    const id = matches[2];
-                    const season = matches[3];
-                    const episode = matches[4];
-
-                    let embedUrl;
-                    if (type === 'movie') {
-                        embedUrl = `embed.html?aurl=https://vidbinge.dev/embed/movie/${id}`;
-                    } else if (type === 'tv' && season && episode) {
-                        embedUrl = `embed.html?aurl=https://vidbinge.dev/embed/tv/${id}/1/1`;
-                    } else {
-                        console.error("Invalid URL format for series");
-                        return;
-                    }
-
-                    iframe.src = embedUrl;
+                if (mediaUrl) {
+                    iframe.src = mediaUrl;
                 } else {
                     console.error("Invalid media URL format");
                 }
-            } else {
-                console.error("No media URL provided");
             }
-        }
 
         // Trigger the banner to slide up after 3 seconds
         setTimeout(() => {
