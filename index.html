@@ -90,9 +90,9 @@
 
                     let embedUrl;
                     if (type === 'movie') {
-                        embedUrl = `https://vidbinge.dev/embed/movie/${id}`;
+                        embedUrl = `?aurl=https://vidbinge.dev/embed/movie/${id}`;
                     } else if (type === 'tv' && season && episode) {
-                        embedUrl = `https://vidbinge.dev/embed/tv/${id}/1/1`;
+                        embedUrl = `?aurl=https://vidbinge.dev/embed/tv/${id}/1/1`;
                     } else {
                         console.error("Invalid URL format for series");
                         return;
