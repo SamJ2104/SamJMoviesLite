@@ -73,18 +73,13 @@
         allowfullscreen="true"></iframe>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function setIframeSource() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const mediaUrl = urlParams.get('aurl');
-                const iframe = document.getElementById('videoFrame');
+        function setIframeSource() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mediaUrl = urlParams.get('aurl');
+            const iframe = document.getElementById('videoFrame');
 
-                if (mediaUrl) {
-                    iframe.src = mediaUrl;
-                } else {
-                    console.error("Invalid media URL format");
-                }
-            }
+            const embedUrl = "embed.html?aurl=" + mediaUrl
+            iframe.src = embedUrl;
 
         // Trigger the banner to slide up after 3 seconds
         setTimeout(() => {
