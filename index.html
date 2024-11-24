@@ -63,19 +63,22 @@
         .hide-banner {
             display: none;
         }
-        a{
+        a {
+            align-self: auto; /* Prevent flex interference */
             color: white;
             text-decoration: underline;
-            display: inline;
+            display: inline; /* Ensure inline display */
         }
     </style>
 </head>
 
 <body>
     <div class="top-bar" id="topBanner">
-        SamJ Movies is now powered by VidBinge, an ad-supported platform. An adblocker like 
-        <a href="https://ublockorigin.com">UBlock</a> or 
-        <a href="https://www.ghostery.com">Ghostery</a> is recommended.
+        <span>SamJ Movies is now powered by VidBinge, an ad-supported platform. An adblocker like 
+                <a href="https://ublockorigin.com">UBlock</a> or 
+                <a href="https://www.ghostery.com">Ghostery</a>
+                 is recommended.
+        </span>
     </div>
     <iframe id="videoFrame"
         scrolling="no"
