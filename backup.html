@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SamJ Movies</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+
+        span {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            background-color: rgba(31, 31, 31, 0.15);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            color: white;
+            right: 1px;
+            width: 100%;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            font-size: 30px;
+            font-weight: bold;
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu;
+            z-index: 1;
+        }
+
+        @media (max-width: 600px) {
+            .top-bar {
+                font-size: 20px;
+            }
+        }
+
+
+        .button-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .button-container button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+        }
+
+        .button-container button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        button {
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar" id="topBanner">
+        <div class="button-container" id="buttonContainer"></div>
+        <span id="headerText" style="margin-left: auto; margin-right: auto;">samj movies (backup)</span>
+    </div>
+
+    <iframe sandbox=" allow-scripts allow-same-origin allow-presentation" id="videoFrame" scrolling="yes"
+        allowfullscreen="true" src=""></iframe>
+
+
+    <script>
+
+
+
+
+
+
+
+        function setIframeSource() {
+            const urlParams = new URLSearchParams(window.location.search);
+            console.log(urlParams)
+            const mediaUrl = urlParams.get('aurl');
+            console.log(mediaUrl)
+            const iframe = document.getElementById('videoFrame');
+
+            if (mediaUrl) {
+                const mediaPattern = /tmdb-(movie|tv)-(\d+)(?:-[^\/]*)?(?:\/(\d+)\/(\d+))?/;
+                const matches = mediaUrl.match(mediaPattern);
+
+                if (matches) {
+                    const type = matches[1];
+                    const id = matches[2];
+                    const season = matches[3];
+                    const episode = matches[4];
+
+                    let embedUrl;
+                    if (type === 'movie') {
+                        embedUrl = `https://111movies.com/movie/${id}`;
+                    } else if (type === 'tv' && season && episode) {
+                        embedUrl = `https:/111movies.com/tv/${id}/1/1`;
+                    } else {
+                        console.error("Invalid URL format for series");
+                        return;
+                    }
+
+                    iframe.src = embedUrl;
+                } else {
+                    console.error("Invalid media URL format");
+                }
+            } else {
+                console.error("No media URL provided");
+            }
+        }
+
+        setIframeSource(); 
+    </script>
+</body>
+
+</html>
