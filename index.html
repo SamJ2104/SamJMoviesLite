@@ -2,18 +2,14 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>SamJ Movies</title>
+    <link rel="shortcut icon" href="https://movies.samj.app/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'CustomFont';
-            src: url('font.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         body {
             margin: 0;
             padding: 0;
@@ -27,15 +23,13 @@
             border: none;
         }
 
+        span {
+            display: block;
+            margin: 0 auto;
+        }
+
         .top-bar {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
             background-color: rgba(31, 31, 31, 0.15);
-            color: #000000;
             backdrop-filter: blur(5px);
             box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
             position: absolute;
@@ -43,63 +37,143 @@
             color: white;
             right: 1px;
             width: 100%;
-            height: 60px;
+            height: 70px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 20px;
+            font-size: 30px;
             font-weight: bold;
-            font-family: 'CustomFont', sans-serif;
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu;
             z-index: 1;
-            transition: transform 0.5s ease;
-
         }
 
-        .slide-up {
-            transform: translateY(-100%);
+        @media (max-width: 600px) {
+            .top-bar {
+                font-size: 20px;
+                text-align: right; /* Align the text to the right */
+            }
+
+            #headerText {
+                
+                margin-right: 20px; /* Add right margin to give space from the edge */
+            }
         }
 
-
-        .hide-banner {
-            display: none;
+        .button-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        a {
-            align-self: auto; /* Prevent flex interference */
+
+        .button-container button {
+            background: none;
+            border: none;
             color: white;
-            text-decoration: underline;
-            display: inline; /* Ensure inline display */
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+        }
+
+        .button-container button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        button {
+            font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu;
         }
     </style>
 </head>
 
 <body>
     <div class="top-bar" id="topBanner">
-        <span>SamJ Movies is now powered by VidBinge, an ad-supported platform.
-        </span>
+        <div class="button-container" id="buttonContainer"></div>
+        <span id="headerText">samj movies, now ad-free</span>
     </div>
-    <iframe id="videoFrame"
-        scrolling="no"
-        allowfullscreen="true"></iframe>
+
+    <iframe sandbox=" allow-scripts allow-same-origin allow-presentation" id="videoFrame" scrolling="yes"
+        allowfullscreen="true" src=""></iframe>
 
     <script>
-function setIframeSource() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const mediaUrl = urlParams.get('aurl');
-    const iframe = document.getElementById('videoFrame');
+        const headerText = document.getElementById('headerText');
 
-    if (mediaUrl) { // Check if mediaUrl is valid
-        const embedUrl = "embed.html?aurl=" + mediaUrl;
-        iframe.src = embedUrl;
-    }
+        if (window.innerWidth <= 600) {
+            headerText.textContent = 'samj movies';
+        }
 
-    // Trigger the banner to slide up after 3 seconds
-    setTimeout(() => {
-        document.getElementById('topBanner').classList.add('slide-up');
-    }, 3000);
-}
+        const buttons = [
+            {
+                text: 'Not Loading? Click Me', action: function () {
+                    const currentUrl = new URL(window.location.href);
+                    const backupUrl = new URL('/backup.html', window.location.origin);
 
-// Call the function once here
-setIframeSource();
+                    // Append all query parameters from current URL to the backup URL
+                    Array.from(currentUrl.searchParams.entries()).forEach(([key, value]) => {
+                        backupUrl.searchParams.append(key, value);
+                    });
+
+                    // Redirect to the backup URL with query parameters
+                    window.location.href = backupUrl.toString();
+                }
+            },
+        ];
+
+        buttons.forEach(buttonInfo => {
+            const button = document.createElement('button');
+            button.innerHTML = buttonInfo.text;
+
+            if (buttonInfo.url) {
+                button.addEventListener('click', function () {
+                    document.querySelector('iframe').src = buttonInfo.url;
+                });
+            } else if (buttonInfo.action) {
+                button.addEventListener('click', buttonInfo.action);
+            }
+
+            document.getElementById('buttonContainer').appendChild(button);
+        });
+
+        function setIframeSource() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mediaUrl = urlParams.get('aurl');
+            const iframe = document.getElementById('videoFrame');
+
+            if (mediaUrl) {
+                const mediaPattern = /tmdb-(movie|tv)-(\d+)(?:-[^\/]*)?(?:\/(\d+)\/(\d+))?/;
+                const matches = mediaUrl.match(mediaPattern);
+
+                if (matches) {
+                    const type = matches[1];
+                    const id = matches[2];
+                    const season = matches[3];
+                    const episode = matches[4];
+
+                    let embedUrl;
+                    if (type === 'movie') {
+                        embedUrl = `https://vidbinge.dev/embed/movie/${id}`;
+                    } else if (type === 'tv' && season && episode) {
+                        embedUrl = `https://vidbinge.dev/embed/tv/${id}/1/1`;
+                    } else {
+                        console.error("Invalid URL format for series");
+                        return;
+                    }
+
+                    iframe.src = embedUrl;
+                } else {
+                    console.error("Invalid media URL format");
+                }
+            } else {
+                console.error("No media URL provided");
+            }
+        }
+
+        setIframeSource(); 
     </script>
 </body>
 
