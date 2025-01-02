@@ -122,9 +122,9 @@
 
                     let embedUrl;
                     if (type === 'movie') {
-                        embedUrl = `https://111movies.com/movie/${id}`;
+                        embedUrl = `https://rivestream.live/embed?type=movie&id=${id}`;
                     } else if (type === 'tv' && season && episode) {
-                        embedUrl = `https://111movies.com/tv/${id}/1/1`;
+                        embedUrl = `https://rivestream.live/embed?type=tv&id=${id}&season=1&episode=1`;
                     } else {
                         console.error("Invalid URL format for series");
                         return;
